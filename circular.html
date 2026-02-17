@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Circular Ruins</title>
+    <style>
+        @font-face {
+            font-family: 'VCR OSD Mono';
+            src: url('VCR_OSD_MONO_1_001 copy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: block;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #FFFBF5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'VCR OSD Mono', 'Courier New', monospace;
+            overflow: hidden;
+        }
+
+        .title {
+            color: black;
+            font-size: 80px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 40px;
+            word-wrap: break-word;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid black;
+            width: 0;
+            animation: typewriter 2s steps(18) 0.5s forwards, blink 0.75s step-end infinite;
+            display: inline-block;
+        }
+
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 18ch; /* 18 characters for "the circular ruins" */
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .title.typed {
+            border-right: none;
+            animation: none;
+            width: auto;
+            overflow: visible;
+        }
+
+        .start-button {
+            color: #BC3027;
+            font-size: 30px;
+            font-weight: 400;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            color: #8B0000;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes jiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+            75% { transform: rotate(-2deg); }
+        }
+
+        .stamp:hover {
+            animation: jiggle 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <img src="stamp.png" class="stamp" onclick="window.location.href='index.html'" alt="Back to envelope">
+    
+    <div class="title">the circular ruins</div>
+    <div class="start-button" onclick="window.location.href='circular-story.html'">press start!</div>
+    
+    <script src="circular-script.js"></script>
+    <script>
+        // Remove cursor after typewriter effect completes
+        setTimeout(() => {
+            document.querySelector('.title').classList.add('typed');
+        }, 2500); // 0.5s delay + 2s typing = 2.5s total
+    </script>
+</body>
+</html>

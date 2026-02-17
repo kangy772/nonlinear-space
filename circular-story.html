@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Circular Ruins - Story</title>
+    <style>
+        @font-face {
+            font-family: 'VCR OSD Mono';
+            src: url('VCR_OSD_MONO_1_001 copy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: block;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #FFFBF5;
+            overflow: hidden;
+            font-family: 'VCR OSD Mono', 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dot-container {
+            width: 1440px;
+            height: 1024px;
+            position: relative;
+        }
+
+        /* Stamp styling */
+        .stamp {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .stamp:hover {
+            animation: jiggle 0.3s ease-in-out;
+        }
+
+        .number {
+            position: absolute;
+            color: black;
+            font-size: 17px;
+            font-weight: 400;
+            width: 25px;
+            height: 35px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: black;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        #drawingCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1440px;
+            height: 1024px;
+            cursor: crosshair;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        #drawingCanvas.pointer-mode {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .drawing-tools {
+            position: absolute;
+            top: 50%;
+            right: -50px;
+            transform: translateY(-50%);
+            width: 47px;
+            height: 208px;
+            z-index: 20;
+        }
+
+        .tool-btn {
+            position: absolute;
+            width: 47px;
+            height: 47px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .tool-btn img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .tool-btn.active {
+            opacity: 0.7;
+        }
+
+        @keyframes jiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+            75% { transform: rotate(-2deg); }
+        }
+
+        .tool-btn.jiggle {
+            animation: jiggle 0.3s ease-in-out;
+        }
+
+        #pointerTool {
+            width: 47px;
+            height: 47px;
+            left: 0px;
+            top: 0px;
+        }
+
+        #penTool {
+            width: 44px;
+            height: 43px;
+            left: 2px;
+            top: 55px;
+        }
+
+        #eraserTool {
+            width: 44px;
+            height: 43px;
+            left: 2px;
+            top: 106px;
+        }
+
+        #clearTool {
+            width: 43px;
+            height: 43px;
+            left: 3px;
+            top: 157px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dot-container">
+        <!-- Stamp -->
+        <img src="stamp.png" class="stamp" onclick="window.location.href='index.html'" alt="Home">
+        
+        <!-- Drawing Canvas -->
+        <canvas id="drawingCanvas"></canvas>
+
+        <!-- Drawing Tools -->
+        <div class="drawing-tools">
+            <button class="tool-btn" id="pointerTool" title="Pointer/Mouse">
+                <img src="mouse.png" alt="Pointer">
+            </button>
+            <button class="tool-btn" id="penTool" title="Pen">
+                <img src="pencil.png" alt="Pen">
+            </button>
+            <button class="tool-btn" id="eraserTool" title="Eraser">
+                <img src="eraser.png" alt="Eraser">
+            </button>
+            <button class="tool-btn" id="clearTool" title="Clear All">
+                <img src="trash.png" alt="Clear">
+            </button>
+        </div>
+
+        <!-- Title text -->
+        <div style="width: 128px; height: 36px; left: -50px; top: 494px; position: absolute; text-align: center; color: #BC3027; font-size: 18px; font-family: VCR OSD Mono; font-weight: 400; word-wrap: break-word; z-index: 5; cursor: pointer;" onclick="window.location.href='index.html'">the circular<br/>ruins</div>
+        
+        <!-- Numbers -->
+        <div class="number" style="left: 600px; top: 808px;">1</div>
+        <div class="number" style="left: 843px; top: 859px;">20</div>
+        <div class="number" style="left: 923px; top: 705px;">19</div>
+        <div class="number" style="left: 844px; top: 504px;">18</div>
+        <div class="number" style="left: 823px; top: 653px;">16</div>
+        <div class="number" style="left: 747px; top: 570px;">15</div>
+        <div class="number" style="left: 620px; top: 626px;">6</div>
+        <div class="number" style="left: 645px; top: 517px;">7</div>
+        <div class="number" style="left: 548px; top: 401px;">4</div>
+        <div class="number" style="left: 532px; top: 528px;">3</div>
+        <div class="number" style="left: 490px; top: 673px;">2</div>
+        <div class="number" style="left: 602px; top: 383px;">8</div>
+        <div class="number" style="left: 642px; top: 260px;">9</div>
+        <div class="number" style="left: 684px; top: 130px;">10</div>
+        <div class="number" style="left: 592px; top: 546px;">5</div>
+        <div class="number" style="left: 839px; top: 581px;">17</div>
+        <div class="number" style="left: 717px; top: 290px;">11</div>
+        <div class="number" style="left: 680px; top: 464px;">12</div>
+        <div class="number" style="left: 772px; top: 332px;">13</div>
+        <div class="number" style="left: 813px; top: 436px;">14</div>
+
+        <!-- Dots -->
+        <div class="dot" style="left: 586px; top: 800px;"></div>
+        <div class="dot" style="left: 828px; top: 853px;"></div>
+        <div class="dot" style="left: 505px; top: 685px;"></div>
+        <div class="dot" style="left: 545px; top: 544px;"></div>
+        <div class="dot" style="left: 561px; top: 411px;"></div>
+        <div class="dot" style="left: 576px; top: 556px;"></div>
+        <div class="dot" style="left: 605px; top: 620px;"></div>
+        <div class="dot" style="left: 630px; top: 527px;"></div>
+        <div class="dot" style="left: 615px; top: 395px;"></div>
+        <div class="dot" style="left: 655px; top: 270px;"></div>
+        <div class="dot" style="left: 670px; top: 142px;"></div>
+        <div class="dot" style="left: 702px; top: 284px;"></div>
+        <div class="dot" style="left: 697px; top: 452px;"></div>
+        <div class="dot" style="left: 758px; top: 344px;"></div>
+        <div class="dot" style="left: 801px; top: 447px;"></div>
+        <div class="dot" style="left: 770px; top: 564px;"></div>
+        <div class="dot" style="left: 809px; top: 647px;"></div>
+        <div class="dot" style="left: 861px; top: 593px;"></div>
+        <div class="dot" style="left: 830px; top: 518px;"></div>
+        <div class="dot" style="left: 908px; top: 702px;"></div>
+    </div>
+    
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 1440;
+        canvas.height = 1024;
+
+        // Drawing state
+        let isDrawing = false;
+        let currentTool = localStorage.getItem('selectedTool') || 'pointer';
+        let lastX = 0;
+        let lastY = 0;
+
+        // Tool buttons
+        const pointerTool = document.getElementById('pointerTool');
+        const penTool = document.getElementById('penTool');
+        const eraserTool = document.getElementById('eraserTool');
+        const clearTool = document.getElementById('clearTool');
+
+        // Initialize tool on page load
+        function initializeTool() {
+            if (currentTool === 'pointer') {
+                canvas.classList.add('pointer-mode');
+                pointerTool.classList.add('active');
+            } else if (currentTool === 'pen') {
+                canvas.classList.remove('pointer-mode');
+                penTool.classList.add('active');
+                canvas.style.cursor = 'crosshair';
+            } else if (currentTool === 'eraser') {
+                canvas.classList.remove('pointer-mode');
+                eraserTool.classList.add('active');
+                canvas.style.cursor = 'pointer';
+            }
+        }
+
+        // Call initialize on load
+        initializeTool();
+
+        // Tool selection
+        pointerTool.addEventListener('click', () => {
+            currentTool = 'pointer';
+            localStorage.setItem('selectedTool', 'pointer');
+            canvas.classList.add('pointer-mode');
+            pointerTool.classList.add('active');
+            penTool.classList.remove('active');
+            eraserTool.classList.remove('active');
+            
+            // Jiggle animation
+            pointerTool.classList.add('jiggle');
+            setTimeout(() => pointerTool.classList.remove('jiggle'), 300);
+        });
+
+        penTool.addEventListener('click', () => {
+            currentTool = 'pen';
+            localStorage.setItem('selectedTool', 'pen');
+            canvas.classList.remove('pointer-mode');
+            penTool.classList.add('active');
+            pointerTool.classList.remove('active');
+            eraserTool.classList.remove('active');
+            canvas.style.cursor = 'crosshair';
+            
+            // Jiggle animation
+            penTool.classList.add('jiggle');
+            setTimeout(() => penTool.classList.remove('jiggle'), 300);
+        });
+
+        eraserTool.addEventListener('click', () => {
+            currentTool = 'eraser';
+            localStorage.setItem('selectedTool', 'eraser');
+            canvas.classList.remove('pointer-mode');
+            eraserTool.classList.add('active');
+            pointerTool.classList.remove('active');
+            penTool.classList.remove('active');
+            canvas.style.cursor = 'pointer';
+            
+            // Jiggle animation
+            eraserTool.classList.add('jiggle');
+            setTimeout(() => eraserTool.classList.remove('jiggle'), 300);
+        });
+
+        clearTool.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Jiggle animation
+            clearTool.classList.add('jiggle');
+            setTimeout(() => clearTool.classList.remove('jiggle'), 300);
+        });
+
+        // Drawing functions
+        function startDrawing(e) {
+            if (currentTool === 'pointer') return;
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing || currentTool === 'pointer') return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            
+            if (currentTool === 'pen') {
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.globalCompositeOperation = 'source-over';
+            } else if (currentTool === 'eraser') {
+                ctx.lineWidth = 20;
+                ctx.globalCompositeOperation = 'destination-out';
+            }
+            
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Canvas event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Make dots clickable
+        const dots = document.querySelectorAll('.dot');
+        
+        dots[0].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-1.html';
+        });
+        dots[2].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-2.html';
+        });
+        dots[3].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-3.html';
+        });
+        dots[4].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-4.html';
+        });
+        dots[5].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-5.html';
+        });
+        dots[6].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-6.html';
+        });
+        dots[7].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-7.html';
+        });
+        dots[8].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-8.html';
+        });
+        dots[9].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-9.html';
+        });
+        dots[10].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-10.html';
+        });
+        dots[11].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-11.html';
+        });
+        dots[12].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-12.html';
+        });
+        dots[13].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-13.html';
+        });
+        dots[14].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-14.html';
+        });
+        dots[15].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-15.html';
+        });
+        dots[16].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-16.html';
+        });
+        dots[17].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-17.html';
+        });
+        dots[18].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-18.html';
+        });
+        dots[19].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-19.html';
+        });
+        dots[1].addEventListener('click', () => {
+            window.location.href = 'circular stories/circular-page-20.html';
+        });
+    </script>
+</body>
+</html>
