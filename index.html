@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Opening Animation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Envelope system -->
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <!-- The closed envelope image (closed.png) -->
+            <div class="envelope-closed" id="envelopeClosed">
+                <img src="closed.png" alt="Closed Letter" class="envelope-base">
+                
+                <!-- Clickable stamp area (must be before stamp-image for CSS) -->
+                <div class="stamp-hotspot" id="stamp"></div>
+                
+                <!-- Stamp image -->
+                <div class="stamp-image">
+                    <img src="stamp.png" alt="Stamp">
+                </div>
+            </div>
+            
+            <!-- The opened envelope with fanned cards (letteropencard.png) -->
+            <div class="envelope-opened" id="envelopeOpened">
+                <img src="letteropencard.png" alt="Opened Letter with Cards">
+                <!-- Clickable areas for each card -->
+                <div class="card-hotspot card-hotspot-1" data-card="circularcard.png"></div>
+                <div class="card-hotspot card-hotspot-2" data-card="gardencard.png"></div>
+                <div class="card-hotspot card-hotspot-3" data-card="sandcard.png"></div>
+            </div>
+        </div>
+        
+        <!-- Fullsize card viewer -->
+        <div class="fullsize-viewer" id="fullsizeViewer">
+            <img src="stamp.png" class="fullsize-stamp" onclick="closeFullsize()" alt="Back to envelope">
+            <div class="fullsize-content">
+                <img id="fullsizeImage" src="" alt="Full Size Card">
+                <!-- Click to enter element (shows for all cards) -->
+                <img id="clickToEnter" class="click-to-enter" src="open1.png" alt="Click to Enter">
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

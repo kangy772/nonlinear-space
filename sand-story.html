@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Book of Sand - Story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: url('paper_texture.jpg') center/cover no-repeat;
+            overflow: hidden;
+            font-family: 'EB Garamond', serif;
+            font-weight: 400;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .prompt-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.70;
+            color: #9F0000;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .prompt-container.left {
+            left: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: left;
+        }
+
+        .input-field {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #9F0000;
+            outline: none;
+            width: 150px;
+            font-size: 18px;
+            font-family: 'EB Garamond', serif;
+            font-weight: 400;
+            color: #9F0000;
+            text-align: center;
+            margin-left: 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { border-bottom-color: #9F0000; }
+            50%, 100% { border-bottom-color: transparent; }
+        }
+
+        .input-field:focus {
+            animation: none;
+            border-bottom-color: #9F0000;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            right: 100px;
+            transform: translateY(-50%);
+            max-width: 600px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.8;
+            color: black;
+            display: none;
+            z-index: 50;
+            padding: 20px;
+        }
+
+        .content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <img src="stamp.png" class="stamp" onclick="window.location.href='sand.html'" alt="Back">
+    
+    <div class="prompt-container" id="promptContainer">
+        enter a number <input type="text" class="input-field" id="pageInput" autocomplete="off" />
+    </div>
+    
+    <!-- Error message for page 1 -->
+    <div class="content" id="error" style="text-align: center; font-style: italic;">There is no first page.</div>
+    
+    <!-- Fragments 1-10 -->
+    <div class="content" id="frag1">The line is made up of an infinite number of points; the plane of an infinite number of lines; the volume of an infinite number of planes; the hypervolume of an infinite number of volumes . . . . No, unquestionably this is not—more geometrico—the best way of beginning my story. To claim that it is true is nowadays the convention of every made-up story. Mine, however, is true.</div>
+    
+    <div class="content" id="frag2">I live alone in a fourth-floor apartment on Belgrano Street, in Buenos Aires. Late one evening, a few months back, I heard a knock at my door. I opened it and a stranger stood there. He was a tall man, with nondescript features—or perhaps it was my myopia that made them seem that way. Dressed in gray and carrying a gray suitcase in his hand, he had an unassuming look about him. I saw at once that he was a foreigner. At first, he struck me as old; only later did I realize that I had been misled by his thin blond hair, which was, in a Scandinavian sort of way, almost white. During the course of our conversation, which was not to last an hour, I found out that he came from the Orkneys.</div>
+    
+    <div class="content" id="frag3">I invited him in, pointing to a chair. He paused awhile before speaking. A kind of gloom emanated from him—as it does now from me.<br/><br/>"I sell Bibles," he said.<br/><br/>Somewhat pedantically, I replied, "In this house are several English Bibles, including the first—John Wiclif's. I also have Cipriano de Valera's, Luther's—which, from a literary viewpoint, is the worst—and a Latin copy of the Vulgate. As you see, it's not exactly Bibles I stand in need of.</div>
+    
+    <div class="content" id="frag4">After a few moments of silence, he said, "I don't only sell Bibles. I can show you a holy book I came across on the outskirts of Bikaner. It may interest you."<br/><br/>He opened the suitcase and lay the book on a table. It was an octavo volume, bound in cloth. There was no doubt that it had passed through many hands. Examining it, I was surprised by its unusual weight. On the spine were the words "Holy Writ" and, below them, "Bombay."<br/><br/>"Nineteenth-century, probably," I remarked.<br/><br/>"I don't know," he said. "I've never found out."</div>
+    
+    <div class="content" id="frag5">I opened the book at random. The script was strange to me. The pages, which were worn and typographically poor, were laid out in double columns, as in a Bible. The text was closely printed, and it was ordered in versicles. In the upper corners of the pages were Arabic numbers. I noticed that one left-hand page bore the number (let us say) 40,514 and the facing right-hand page 999. I turned the leaf; it was numbered with eight digits. It also bore a small illustration, like the kind used in dictionaries—an anchor drawn with pen and ink, as if by a schoolboy's clumsy hand.<br/><br/>It was at this point that the stranger said, "Look at the illustration closely. You'll never see it again."</div>
+    
+    <div class="content" id="frag6">I noted my place and closed the book. At once, I reopened it. Page by page, in vain, I looked for the illustration of the anchor.<br/><br/>"It seems to be a version of Scriptures in some Indian language, is it not?" I said to hide my dismay.<br/><br/>"No," he replied. Then, as if confiding a secret, he lowered his voice. "I acquired the book in a town out on the plain in exchange for a handful of rupees and a Bible. Its owner did not know how to read. I suspect that he saw the Book of Books as a talisman. He was of the lowest caste; nobody but other untouchables could tread his shadow without contamination. He told me his book was called the Book of Sand, because neither the book nor the sand has any beginning or end."</div>
+    
+    <div class="content" id="frag7">The stranger asked me to find the first page.<br/><br/>I lay my left hand on the cover and, trying to put my thumb on the flyleaf, I opened the book. It was useless. Every time I tried, a number of pages came between the cover and my thumb. It was as if they kept growing from the book.<br/><br/>"Now find the last page."<br/><br/>Again I failed. In a voice that was not mine, I barely managed to stammer, "This can't be."<br/><br/>Still speaking in a low voice, the stranger said, "It can't be, but it is. The number of pages in this book is no more or less than infinite. None is the first page, none the last. I don't know why they're numbered in this arbitrary way. Perhaps to suggest that the terms of an infinite series admit any number."</div>
+    
+    <div class="content" id="frag8">Then, as if he were thinking aloud, he said, "If space is infinite, we may be at any point in space. If time is infinite, we may be at any point in time."<br/><br/>His speculations irritated me. "You are religious, no doubt?" I asked him.<br/><br/>"Yes, I'm a Presbyterian. My conscience is clear. I am reasonably sure of not having cheated the native when I gave him the Word of God in exchange for his devilish book."<br/><br/>"No. I'm offering it to you," he said, and he stipulated a rather high sum for the book.<br/><br/>"I propose a swap," I said. "You got this book for a handful of rupees and a copy of the Bible. I'll offer you the amount of my pension check, which I've just collected, and my black-letter Wiclif Bible. I inherited it from my ancestors."<br/><br/>"It's a deal," he said.</div>
+    
+    <div class="content" id="frag9">I thought of keeping the Book of Sand in the space left on the shelf by the Wiclif, but in the end I decided to hide it behind the volumes of a broken set of "The Thousand and One Nights." I went to bed and did not sleep. At three or four in the morning, I turned on the light. I got down the impossible book and leafed through its pages. On one of them I saw engraved a mask. The upper corner of the page carried a number, which I no longer recall, elevated to the ninth power.<br/><br/>I showed no one my treasure. To the luck of owning it was added the fear of having it stolen, and then the misgiving that it might not truly be infinite. These twin preoccupations intensified my old misanthropy. I had only a few friends left; I now stopped seeing even them. A prisoner of the book, I almost never went out anymore. Never once was an illustration repeated.</div>
+    
+    <div class="content" id="frag10">Summer came and went, and I realized that the book was monstrous. What good did it do me to think that I, who looked upon the volume with my eyes, who held it in my hands, was any less monstrous? I felt that the book was a nightmarish object, an obscene thing that affronted and tainted reality itself.<br/><br/>I thought of fire, but I feared that the burning of an infinite book might likewise prove infinite and suffocate the planet with smoke. Somewhere I recalled reading that the best place to hide a leaf is in a forest. One day I went there and, slipping past a member of the staff, I lost the Book of Sand on one of the basement's musty shelves.</div>
+
+    <script>
+        const input = document.getElementById('pageInput');
+        const promptContainer = document.getElementById('promptContainer');
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const value = input.value.trim();
+                
+                // Hide all content
+                document.querySelectorAll('.content').forEach(f => f.classList.remove('active'));
+                
+                // Check if input is numeric
+                if (!/^\d+$/.test(value)) {
+                    return;
+                }
+                
+                // Move input bar to left
+                promptContainer.classList.add('left');
+                
+                // Special case: exactly 1
+                if (value === '1') {
+                    document.getElementById('error').classList.add('active');
+                    input.value = '';
+                    return;
+                }
+                
+                // Get last digit
+                const lastDigit = value.charAt(value.length - 1);
+                const fragmentNumber = lastDigit === '0' ? 10 : parseInt(lastDigit);
+                
+                // Show fragment
+                document.getElementById('frag' + fragmentNumber).classList.add('active');
+                
+                // Clear input
+                input.value = '';
+            }
+        });
+
+        // Focus input
+        window.onload = function() {
+            input.focus();
+        };
+    </script>
+</body>
+</html>

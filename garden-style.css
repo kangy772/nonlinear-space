@@ -1,0 +1,782 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500&display=swap');
+
+@font-face {
+    font-family: 'Newake';
+    src: url('NewakeFont-Demo.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+html.scroll-locked {
+    overflow: hidden;
+}
+
+body.scroll-locked {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+body {
+    background: #8EA95A;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: #182007;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.8;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Grain texture */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    z-index: 2;
+}
+
+.content {
+    max-width: 743px;
+    margin: 0 auto;
+    margin-left: 50%;
+    padding: 100vh 0 200vh 0;
+    position: relative;
+}
+
+/* Top mask to prevent text scrolling over title */
+.content::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: #8EA95A;
+    z-index: 50;
+    pointer-events: none;
+}
+
+/* Grain for mask area */
+.content::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    z-index: 51;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* Title - centered in middle of entire screen */
+.title {
+    font-family: 'Newake', 'Georgia', serif;
+    font-size: 90px;
+    font-weight: 400;
+    color: #EDD8DA;
+    text-align: center;
+    white-space: nowrap;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.title span {
+    display: inline-block;
+    color: #EDD8DA;
+    transition: color 2s ease;
+    cursor: default;
+}
+
+/* Space characters */
+.title span.space {
+    width: 0.2em;
+    pointer-events: none;
+}
+
+.title span:hover {
+    transition: color 0.1s ease;
+}
+
+/* Different colors for hover - inspired by imchr.is */
+.title span:hover {
+    color: #FF6B9D;
+}
+
+.title span:nth-child(2n):hover {
+    color: #C49BFF;
+}
+
+.title span:nth-child(3n):hover {
+    color: #4ECDC4;
+}
+
+.title span:nth-child(5n):hover {
+    color: #FFE66D;
+}
+
+.title span:nth-child(7n):hover {
+    color: #FF6B6B;
+}
+
+.title span:nth-child(11n):hover {
+    color: #95E1D3;
+}
+
+/* Trigger words - clickable to unlock scroll */
+.trigger-word {
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+    display: inline-block;
+    color: #4B0E07;
+}
+
+.trigger-word:hover {
+    color: #EDD8DA;
+    animation: triggerJiggle 0.3s ease-in-out infinite !important;
+}
+
+@keyframes triggerJiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(8deg);
+    }
+    75% {
+        transform: rotate(8deg);
+    }
+}
+
+.trigger-word.clicked {
+    color: #EDD8DA;
+    cursor: default;
+}
+
+.trigger-word.clicked:hover {
+    animation: none !important;
+}
+
+/* Phase 3: "out" word - same as "missing" */
+.word.trigger-word {
+    cursor: pointer;
+    color: #4B0E07;
+}
+
+.word.trigger-word:hover {
+    color: #EDD8DA;
+    animation: outJiggle 0.3s ease-in-out infinite !important;
+    opacity: 1 !important;
+}
+
+@keyframes outJiggle {
+    0%, 100% {
+        transform: rotate(0deg) translateY(0);
+        opacity: 1;
+    }
+    25% {
+        transform: rotate(-2deg) translateY(0);
+        opacity: 1;
+    }
+    75% {
+        transform: rotate(2deg) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Phase 2: Strikethrough animation for "flee" */
+.phase2-trigger.clicked::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 2px;
+    background: #182007;
+    animation: strikethrough 0.5s ease forwards;
+}
+
+@keyframes strikethrough {
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Phase 2 choice UI */
+.phase2-choice {
+    opacity: 0;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 10px;
+    transition: opacity 0.5s ease 0.5s;
+}
+
+.phase2-choice.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.phase2-choice .or-not {
+    display: none;
+}
+
+.choice-buttons {
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.8s forwards;
+}
+
+.choice-btn {
+    background: transparent;
+    border: 2px solid;
+    border-radius: 25px;
+    padding: 8px 24px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.choice-btn:hover {
+    transform: scale(1.05);
+}
+
+.choice-btn[data-choice="yes"] {
+    color: #0D0D0D;
+    border-color: #0D0D0D;
+}
+
+.choice-btn[data-choice="yes"]:hover {
+    background: #0D0D0D;
+    color: #EDD8DA;
+}
+
+.choice-btn[data-choice="no"] {
+    color: #CA1212;
+    border-color: #CA1212;
+}
+
+.choice-btn[data-choice="no"]:hover {
+    background: #CA1212;
+    color: #EDD8DA;
+}
+
+/* Phase 3: Timorous line - italics, clickable */
+.timorous-line {
+    font-style: italic;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.timorous-line:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 3: Underlined trigger */
+.underlined-trigger {
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.underlined-trigger:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 3: Collapsible text */
+.collapsible-text {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.collapsible-text.expanded {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.collapsible-text p {
+    margin: 1.5em 0;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    color: #5B6E36;
+}
+
+/* Phase 3: Word by word reveal */
+.word-by-word {
+    opacity: 1;
+}
+
+.word-by-word .word {
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(10px);
+    animation: fadeInWord 0.6s ease-out forwards;
+}
+
+@keyframes fadeInWord {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Phase 3: Slam animation for "out" */
+@keyframes slamOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(3);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.word.slam {
+    animation: slamOut 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+    opacity: 1 !important;
+}
+
+/* Phase 3: Hover effect for "out" */
+.word.trigger-word {
+    display: inline-block;
+    color: #4B0E07;
+}
+
+.word.trigger-word:hover {
+    font-style: italic;
+    opacity: 1 !important;
+    color: #EDD8DA;
+}
+
+@keyframes hoverJiggle {
+    0%, 100% {
+        font-style: italic;
+    }
+    25% {
+        font-style: italic;
+    }
+    75% {
+        font-style: italic;
+    }
+}
+
+/* Phase 4: Reveal triggers */
+.reveal-trigger {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: color 0.3s ease;
+    text-decoration: underline;
+}
+
+.reveal-trigger.two-circumstances {
+    color: #EDD8DA;
+    text-decoration: none;
+}
+
+.reveal-trigger.a-man {
+    color: #4B0E07;
+}
+
+.reveal-trigger.dr-albert {
+    color: #4B0E07;
+}
+
+.reveal-trigger.garden-word {
+    color: #4B0E07;
+}
+
+.reveal-trigger:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 4: X-ing out animation for "a man" */
+.reveal-trigger.crossed::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 2px;
+    background: #182007;
+    transform: rotate(-10deg);
+    animation: crossOut 0.4s ease forwards;
+}
+
+@keyframes crossOut {
+    to {
+        width: 100%;
+    }
+}
+
+/* Phase 4: Reveal text */
+.reveal-text {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    color: #5B6E36;
+}
+
+.reveal-text.show {
+    max-height: 200px;
+    opacity: 1;
+}
+
+/* Phase 4: Typewriter trigger - Ts'ui Pen */
+.typewriter-trigger {
+    color: #EDD8DA;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.typewriter-trigger.tsui-pen {
+    font-style: italic;
+    color: #4B0E07;
+    text-decoration: underline;
+}
+
+.typewriter-trigger.tsui-pen:hover {
+    animation: none !important;
+}
+
+.typewriter-trigger:hover {
+    animation: triggerJiggle 0.3s ease-in-out infinite !important;
+}
+
+/* Phase 4: Typewriter text */
+.typewriter-text {
+    color: #5B6E36;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.typewriter-text.typing {
+    opacity: 1;
+    max-height: 500px;
+}
+
+/* Phase 4: Lock trigger paragraph */
+.lock-trigger {
+    margin: 1.5em 0;
+}
+
+/* Phase 4: Circumstances choice UI */
+.circumstances-choice {
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    transition: opacity 0.5s ease 0.3s;
+}
+
+.circumstances-choice.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Phase 5: Possible solutions - italics */
+.possible-solutions {
+    font-style: italic;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.possible-solutions:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 5: Center sentence - normal positioning */
+.center-sentence {
+    margin: 1.5em 0;
+}
+
+/* Phase 5: Two versions trigger */
+.two-versions-trigger {
+    color: #EDD8DA;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.two-versions-trigger:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 5: Chess question - italics and clickable */
+.chess-question {
+    font-style: italic;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.chess-question:hover {
+    color: #EDD8DA;
+}
+
+/* Phase 5: Garden title trigger - italics and color on hover, cross out on click */
+.garden-title-trigger {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: font-style 0.3s ease, color 0.3s ease;
+}
+
+.garden-title-trigger:hover {
+    font-style: italic;
+    color: #EDD8DA;
+}
+
+.garden-title-trigger.crossed::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 2px;
+    background: #182007;
+    transform: translateY(-50%) rotate(-2deg);
+    animation: crossOut 0.4s ease forwards;
+}
+
+/* Phase 5: Versions choice UI */
+.versions-choice {
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    transition: opacity 0.5s ease 0.3s;
+}
+
+.versions-choice.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.versions-choice .choice-buttons {
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.4s forwards;
+}
+
+.versions-choice .choice-btn[data-choice="version1"],
+.versions-choice .choice-btn[data-choice="version2"] {
+    color: #0D0D0D;
+    border-color: #0D0D0D;
+    transition: all 0.3s ease;
+}
+
+.versions-choice .choice-btn[data-choice="version1"]:hover,
+.versions-choice .choice-btn[data-choice="version2"]:hover {
+    background: #0D0D0D;
+    color: #EDD8DA;
+    transform: translateY(-3px);
+}
+
+.circumstances-choice .choice-buttons {
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.4s forwards;
+}
+
+.circumstances-choice .choice-buttons {
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.4s forwards;
+}
+
+.circumstances-choice .choice-btn[data-choice="option1"] {
+    color: #0D0D0D;
+    border-color: #0D0D0D;
+    transition: all 0.3s ease;
+}
+
+.circumstances-choice .choice-btn[data-choice="option1"]:hover {
+    background: #0D0D0D;
+    color: #EDD8DA;
+    transform: translateY(-3px);
+}
+
+.circumstances-choice .choice-btn[data-choice="option2"] {
+    color: #0D0D0D;
+    border-color: #0D0D0D;
+    transition: all 0.3s ease;
+}
+
+.circumstances-choice .choice-btn[data-choice="option2"]:hover {
+    background: #0D0D0D;
+    color: #EDD8DA;
+    transform: translateY(-3px);
+}
+
+/* Phase system */
+.phase {
+    margin-bottom: 60px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 2s ease, transform 2s ease;
+    will-change: opacity, transform;
+}
+
+.phase p {
+    margin-bottom: 1.5em;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.phase p.hidden {
+    opacity: 0;
+    transform: translateY(80px);
+}
+
+.phase p.reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Phase 1 - appears calmly, sits firmly */
+.phase-1 {
+    opacity: 1;
+}
+
+/* Phase states */
+.phase.fade-out {
+    opacity: 0.15;
+    transform: translateY(-50px);
+}
+
+.phase.fade-in {
+    animation: fadeInFromBelow 2s ease forwards;
+}
+
+@keyframes fadeInFromBelow {
+    from {
+        opacity: 0;
+        transform: translateY(120px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* The end styling */
+.the-end {
+    color: #182007;
+    transition: color 0.3s ease;
+    margin-top: 2em;
+    display: block;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.the-end:hover {
+    color: #BC3027;
+}
+
+/* Stamp styling */
+.stamp {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+@keyframes jiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+    75% { transform: rotate(-2deg); }
+}
+
+.stamp:hover {
+    animation: jiggle 0.3s ease-in-out;
+}
+
+/* Scroll down arrow at bottom center */
+.scroll-arrow {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .content {
+        max-width: 100%;
+        padding: 120px 24px 200vh 24px;
+        margin-left: 0;
+    }
+    
+    .title {
+        font-size: 24px;
+    }
+    
+    body {
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Book of Sand</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .letter {
+            display: inline-block;
+            position: relative;
+            transition: color 2s ease-out;
+        }
+        
+        .letter.space {
+            width: 0.3em;
+        }
+        
+        .letter:hover {
+            color: #714E3B;
+            transition: color 0.1s ease-in;
+        }
+        
+        .stamp {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <img src="stamp.png" class="stamp" onclick="window.location.href='index.html'" alt="Back to envelope">
+    
+    <div style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: #3A281D; overflow: hidden">
+        <img style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; object-fit: cover; opacity: 0.26" src="leather-texture.jpg" />
+        <div class="book-title" onclick="window.location.href='sand-story.html'" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.70; display: flex; justify-content: center; align-items: center; color: #D2CEB2; font-size: 50px; font-family: 'La Belle Aurore', cursive; font-weight: 400; cursor: pointer; white-space: nowrap;" id="bookTitle"></div>
+    </div>
+    
+    <script>
+        const text = "the book of sands";
+        const titleElement = document.getElementById('bookTitle');
+        
+        // Split text into individual letters
+        for (let char of text) {
+            const span = document.createElement('span');
+            span.className = char === ' ' ? 'letter space' : 'letter';
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            titleElement.appendChild(span);
+        }
+    </script>
+</body>
+</html>
